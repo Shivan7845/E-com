@@ -12,7 +12,11 @@ require('./models/db').dbconnect();
 app.use(express.json());
 // app.use(express.urlencoded({extended : false}));
 
-app.use(cors());
+const corsOptions = {
+    origin: 'https://e-com-frontend-beryl.vercel.app',
+  };
+
+app.use(cors(corsOptions));
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://e-com-frontend-beryl.vercel.app/');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
