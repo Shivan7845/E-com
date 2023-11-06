@@ -50,9 +50,7 @@ app.post('/signin', async(req,res,next) =>{
     if(!isMatch){
         return next (new ErrorHandler('Wrong credentials',500))
     };
-    res.status(200).json({
-        success : true,
-    })
+    res.status(200).json("success")
 })
 //Error handling
 const ErrorHandler = require('./utils/ErrorHandler');
