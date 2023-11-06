@@ -9,7 +9,7 @@ const Login = () => {
 
   const submitHandler = (e) =>{
     e.preventDefault();
-    axios.post('http://localhost:8080/signin', {email,password})
+    axios.post('https://e-com-api-bice.vercel.app/signin', {email,password})
     .then(result => {
       console.log(result)
       if(result.data === 'success'){

@@ -12,7 +12,7 @@ const Signup = () => {
   
   const submitHandler = (e) =>{
     e.preventDefault();
-    axios.post('http://localhost:8080/register', {name,email,password})
+    axios.post('https://e-com-api-bice.vercel.app/register', {name,email,password})
     .then(result => console.log(result),
       navigate('/')
     )
