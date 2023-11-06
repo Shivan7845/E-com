@@ -2,7 +2,7 @@ require('dotenv').config({path : './.env'});
 const express = require('express');
 const User = require('./models/userModel');
 const app = express();
-const cors = require('cors')
+const cors = require('cors');
 
 //db connections
 require('./models/db').dbconnect();
@@ -15,19 +15,12 @@ app.use(express.urlencoded({extended : false}));
     origin: 'https://e-com-frontend-beryl.vercel.app',
   }));
   
-// app.use((req, res, next) => {
-//     res.setHeader('Access-Control-Allow-Origin', 'https://e-com-frontend-beryl.vercel.app/');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     res.setHeader('Access-Control-Allow-Credentials', 'true');
-//     next();
-//   });
-  
-
 //GET 
 app.get('/', (req,res,next) =>{
     res.json('Hello from inside the code')
 });
+
+
 //POST /register
 
 app.post('/register', (req,res,next) =>{
@@ -37,21 +30,39 @@ app.post('/register', (req,res,next) =>{
 });
 //POST /login
 
-app.post('/signin', (req,res,next)=>{
-    const {email,password} = req.body;
-    User.findOne({email: email})
-    .then(user => {
-        if(user) {
-            if(user.password === password) {
-                res.json('success')
-            } else{
-                res.json('password is incorrect')
-            }
-        }else{
-            res.json('no record existed')
-        }
+// app.post('/signin', (req,res,next)=>{
+//     const {email,password} = req.body;
+//     User.findOne({email: email})
+//     .then(user => {
+//         if(user) {
+//             let isMatch = user
+//         }else{
+//             res.json('no record existed')
+//         }
+//     })
+// });
+app.post('/signin', async(req,res,next) =>{
+    const user = await User.findOne({email : req.body.email});
+    if(!user){
+        return next (new ErrorHandler(`User with this email address is not register`,401))
+    };
+    let isMatch = user.comparepassword(req.body.password);
+    if(!isMatch){
+        return next (new ErrorHandler('Wrong credentials',500))
+    };
+    res.status(200).json({
+        success : true,
     })
+})
+//Error handling
+const ErrorHandler = require('./utils/ErrorHandler');
+const { genratedError } = require('./middleware/error');
+
+app.use('*', (req,res,next) =>{
+    next (new ErrorHandler(`Requested url not found`,404))
 });
+
+app.use(genratedError);
 
 //server
 const PORT = 8080;
