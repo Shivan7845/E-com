@@ -4,26 +4,24 @@ const User = require('./models/userModel');
 const app = express();
 const cors = require('cors')
 
-
 //db connections
 require('./models/db').dbconnect();
 
 //body-paser
 app.use(express.json());
-// app.use(express.urlencoded({extended : false}));
+app.use(express.urlencoded({extended : false}));
 
-const corsOptions = {
+  app.use(cors({
     origin: 'https://e-com-frontend-beryl.vercel.app',
-  };
-
-app.use(cors(corsOptions));
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://e-com-frontend-beryl.vercel.app/');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    next();
-  });
+  }));
+  
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', 'https://e-com-frontend-beryl.vercel.app/');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     res.setHeader('Access-Control-Allow-Credentials', 'true');
+//     next();
+//   });
   
 
 //GET 
